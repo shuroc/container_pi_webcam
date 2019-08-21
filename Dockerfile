@@ -2,12 +2,6 @@ FROM debian:stretch
 
 LABEL maintainer="info@enforge.de"
 
-
-### 0 - add repo
-RUN curl -fsSL https://raspbian.raspberrypi.org | sudo apt-key add -
-RUN echo "deb http://raspbian.raspberrypi.org/raspbian stretch main contrib non-free rpi" >> /etc/apt/sources.list
-
-
 ### 1 - update and install os
 RUN apt-get update -y && \
 apt-get upgrade -y && \
@@ -15,12 +9,15 @@ apt-get autoremove && \
 apt-get clean -y && \
 rm -rf /tmp/* /var/tmp/* /var/cache/apt/* /var/cache/distfiles/*
 
+## 1.1 - install required prerequisites
+RUN apt-get install -y net-tools apt-utils curl
 
-WORKDIR /usr/src/app
+## 1.2 - add repo and update
+RUN curl -fsSL https://raspbian.raspberrypi.org | apt-key add -
+RUN echo "deb http://raspbian.raspberrypi.org/raspbian stretch main contrib non-free rpi" >> /etc/apt/sources.list
 
 
 ### 2 - install required software
-RUN apt-get install -y net-tools apt-utils
 RUN apt-get install -y libraspberrypi-bin
 
 
