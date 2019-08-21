@@ -3,6 +3,10 @@ FROM debian:stretch
 LABEL maintainer="info@enforge.de"
 
 
+### 0 - add repo
+RUN echo "deb http://raspbian.raspberrypi.org/raspbian stretch main contrib non-free rpi" >> /etc/apt/sources.list
+
+
 ### 1 - update and install os
 RUN apt-get update -y && \
 apt-get upgrade -y && \
@@ -15,8 +19,8 @@ WORKDIR /usr/src/app
 
 
 ### 2 - install required software
-RUN apt-get install -y net-tools
-RUN apt-get install -y install libraspberrypi-bin
+RUN apt-get install -y net-tools apt-utils
+RUN apt-get install -y libraspberrypi-bin
 
 
 
