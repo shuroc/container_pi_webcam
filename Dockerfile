@@ -4,6 +4,7 @@ LABEL maintainer="info@enforge.de"
 
 
 ### 0 - add repo
+RUN curl -fsSL https://raspbian.raspberrypi.org | sudo apt-key add -
 RUN echo "deb http://raspbian.raspberrypi.org/raspbian stretch main contrib non-free rpi" >> /etc/apt/sources.list
 
 
