@@ -24,6 +24,7 @@ RUN echo "deb http://raspbian.raspberrypi.org/raspbian stretch main contrib non-
 
 
 ### 2 - install required software
+RUN apt list *raspberry*
 RUN apt-get install -y libraspberrypi-bin
 
 
