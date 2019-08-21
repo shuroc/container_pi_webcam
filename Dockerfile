@@ -10,7 +10,13 @@ apt-get clean -y && \
 rm -rf /tmp/* /var/tmp/* /var/cache/apt/* /var/cache/distfiles/*
 
 ## 1.1 - install required prerequisites
-RUN apt-get install -y net-tools apt-utils curl
+RUN apt-get install -y \
+# for ip address and other stuff
+net-tools \
+# prevent message "delaying ... because apt-utils is not installed"
+apt-utils \
+# for adding the repo in 1.2
+curl apt-transport-https ca-certificates gnupg2 software-properties-common
 
 ## 1.2 - add repo and update
 RUN curl -fsSL https://raspbian.raspberrypi.org | apt-key add -
