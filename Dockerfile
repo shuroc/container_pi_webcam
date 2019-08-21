@@ -19,7 +19,7 @@ apt-utils \
 curl apt-transport-https ca-certificates gnupg2 software-properties-common
 
 ## 1.2 - add repo and update
-RUN curl -fsSL https://raspbian.raspberrypi.org | apt-key add -
+RUN curl -fsSL https://archive.raspbian.org/raspbian.public.key | apt-key add -
 RUN echo "deb http://raspbian.raspberrypi.org/raspbian stretch main contrib non-free rpi" >> /etc/apt/sources.list
 
 
