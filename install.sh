@@ -27,6 +27,7 @@ nano /etc/motion/motion.conf
 # set width 1024
 # set height 768
 # set framerate 60
+# set auto brightness on
 # check stream_port 8081
 # check stream_motion off
 # check output_motion off
