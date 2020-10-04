@@ -1,1 +1,0 @@
-chmod +x build.sh run.sh git_pull.sh install.sh
