@@ -30,7 +30,7 @@ jobs:
 
       - name: Build the tagged docker image
         shell: bash
-        run: docker buildx build -t ${DOCKER_REPO_OWNER}/${DOCKER_IMAGE_NAME} .
+        run: docker buildx build -t ${DOCKER_IMAGE_NAME} .
 
       - name: Push the tagged docker image
         shell: bash
