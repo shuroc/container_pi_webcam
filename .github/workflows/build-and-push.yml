@@ -28,15 +28,9 @@ jobs:
       - name: Set up docker buildx
         uses: docker/setup-buildx-action@v1.0.1
 
-      - name: Build the tagged docker image
-        shell: bash
-        run: |
-          docker buildx build -t ${DOCKER_REPO_OWNER}/${DOCKER_IMAGE_NAME} .
-          docker images list
-
-      - name: Push the tagged docker image
+      - name: Build and push the tagged docker image
         shell: bash
         run: |
           docker login --username ${DOCKER_REPO_OWNER} --password ${{ secrets.DOCKERHUB_TOKEN }}
-          docker push ${DOCKER_REPO_OWNER}/${DOCKER_IMAGE_NAME}
+          docker buildx build -t ${DOCKER_REPO_OWNER}/${DOCKER_IMAGE_NAME} --push .
           docker logout
