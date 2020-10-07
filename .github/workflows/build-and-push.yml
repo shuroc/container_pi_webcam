@@ -11,5 +11,7 @@ jobs:
     name: Build docker image and push them to docker hub
     runs-on: ubuntu-20.04
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
       - name: Publish multi-arch image to docker hub
-        uses: tillhoff/ghaction-docker-build-and-push@v0.0.1
+        uses: tillhoff/ghaction-docker-build-and-push@v0.0.2
