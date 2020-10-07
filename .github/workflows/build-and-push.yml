@@ -1,4 +1,4 @@
-name: Publish image to docker hub
+name: Publish multi-arch image to docker hub
 on: # runs whenever a push is made PLUS every tuesday morning
   push:
     branches:
@@ -11,27 +11,5 @@ jobs:
     name: Build docker image and push them to docker hub
     runs-on: ubuntu-20.04
     steps:
-      - name: Set environment variables
-        shell: bash
-        run: |
-          echo "::set-env name=DOCKER_REPO_OWNER::${{ github.repository_owner }}" && echo "${DOCKER_REPO_OWNER}"
-          echo "::set-env name=DOCKER_IMAGE_NAME::$(echo '${{ github.repository }}' | sed 's|.*/containered-||' )" && echo "${DOCKER_IMAGE_NAME}"
-
-      - name: Check out the repo
-        uses: actions/checkout@v2
-
-      - name: Set up QEMU for docker buildx
-        uses: docker/setup-qemu-action@v1.0.1
-        with:
-          platforms: all
-
-      - name: Set up docker buildx
-        id: buildx
-        uses: docker/setup-buildx-action@v1.0.1
-
-      - name: Build and push the tagged docker image
-        shell: bash
-        run: |
-          docker login --username ${DOCKER_REPO_OWNER} --password ${{ secrets.DOCKERHUB_TOKEN }}
-          docker buildx build --platform ${{ steps.buildx.outputs.platforms }} -t ${DOCKER_REPO_OWNER}/${DOCKER_IMAGE_NAME} --push .
-          docker logout
+      - name: Publish multi-arch image to docker hub
+        uses: tillhoff/ghaction-docker-build-and-push@v0.0.1
