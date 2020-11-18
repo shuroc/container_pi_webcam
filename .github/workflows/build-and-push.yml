@@ -1,4 +1,4 @@
-name: Publish image to docker hub
+name: Publish multi-arch image to docker hub
 on: # runs whenever a push is made PLUS every tuesday morning
   push:
     branches:
@@ -14,13 +14,18 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v2
 
-      - name: Build the tagged Docker image
-        shell: bash
-        run: docker build -t ${{ github.repository_owner }}/$( echo ${{ github.repository }} | sed 's|.*/containered-||' ) .
+      - name: Set up QEMU for docker buildx
+        uses: docker/setup-qemu-action@v1.0.1
+        with:
+          platforms: all
 
-      - name: Push the tagged Docker image
+      - name: Set up docker buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1.0.1
+
+      - name: Build and push the tagged docker image
         shell: bash
         run: |
-          docker login --username ${{ github.repository_owner }} --password ${{ secrets.DOCKERHUB_TOKEN }}
-          docker push ${{ github.repository_owner }}/$( echo ${{ github.repository }} | sed 's|.*/containered-||' )
+          docker login --username ${DOCKER_REPO_OWNER} --password ${{ secrets.DOCKERHUB_TOKEN }}
+          docker buildx build --platform ${{ steps.buildx.outputs.platforms }} -t ${DOCKER_REPO_OWNER}/${DOCKER_IMAGE_NAME} --push .
           docker logout
