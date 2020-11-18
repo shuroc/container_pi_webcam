@@ -26,6 +26,6 @@ jobs:
       - name: Build and push the tagged docker image
         shell: bash
         run: |
-          docker login --username ${DOCKER_REPO_OWNER} --password ${{ secrets.DOCKERHUB_TOKEN }}
-          docker buildx build --platform ${{ steps.buildx.outputs.platforms }} -t ${DOCKER_REPO_OWNER}/${DOCKER_IMAGE_NAME} --push .
+          docker login --username ${{ github.repository_owner }} --password ${{ secrets.DOCKERHUB_TOKEN }}
+          docker buildx build --platform ${{ steps.buildx.outputs.platforms }} -t ${{ github.repository_owner }}/$( echo ${{ github.repository }} | sed 's|.*/containered-||' ) --push .
           docker logout
