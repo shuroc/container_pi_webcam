@@ -1,53 +1,24 @@
-FROM debian:stretch
-
-LABEL maintainer="info@enforge.de"
-
-### 1 - update and install os
-RUN apt-get update -y && \
-apt-get upgrade -y && \
-apt-get autoremove && \
-apt-get clean -y && \
-rm -rf /tmp/* /var/tmp/* /var/cache/apt/* /var/cache/distfiles/*
-
-## 1.1 - install required prerequisites
-RUN apt-get install -y \
-# for ip address and other stuff
-net-tools \
-# prevent message "delaying ... because apt-utils is not installed"
-apt-utils \
-# for adding the repo in 1.2
-curl apt-transport-https ca-certificates gnupg2 software-properties-common
-
-## 1.2 - add repo and update
-RUN curl -fsSL https://archive.raspbian.org/raspbian.public.key | apt-key add -
-RUN echo "deb http://raspbian.raspberrypi.org/raspbian stretch main contrib non-free rpi" >> /etc/apt/sources.list
+FROM tillhoff/debian
 
 
-### 2 - install required software
-RUN apt list *raspberry*
-RUN apt-get install -y libraspberrypi-bin
+RUN apt-get install -y motion
 
+RUN sed -i "s|^width .*|width 1024|" /etc/motion/motion.conf && \
+    sed -i "s|^height .*|height 768|" /etc/motion/motion.conf && \
+    sed -i "s|^framerate .*|framerate 30|" /etc/motion/motion.conf && \
+    sed -i "s|^autobrightness .*|autobrightness on|" /etc/motion/motion.conf && \
+    sed -i "s|^stream_port .*|stream_port 80|" /etc/motion/motion.conf && \
+    sed -i "s|^stream_motion .*|stream_motion=off|" /etc/motion/motion.conf && \
+    #sed -i "s|^output_motion=.*|output_motion=off|" /etc/motion/motion.conf && \
+    sed -i "s|^quality .*|quality 75|" /etc/motion/motion.conf && \
+    sed -i "s|^stream_quality .*|stream_quality 75|" /etc/motion/motion.conf && \
+    sed -i "s|^stream_localhost .*|stream_localhost off|" /etc/motion/motion.conf
+    #! stream_auth_method 0 -> 1/2
+    #! stream_authentication username:password
 
-
-### 3 - configure software
-## either
-## COPY install.sh /install.sh
-## or
-## run commands here with RUN
-##   install.sh is bad, as this does not provide any caching of expensive operations
-## thus, RUN commands are used!
-
-## configure the video access
-RUN usermod -a -G video root
-
-
-### 4 - expose network ports
 EXPOSE 80/tcp
 
-
-### 5 - add custom files
-
-
-### 6 - startup command
-#CMD bash
-CMD raspistill -vf -hf -o test.jpg
+# test camera access
+CMD (/opt/vc/bin/raspistill -vf -hf -o output.jpg || \
+    echo "Make sure to enable the camera: 'modprobe bcm2835-v4l2'\nYou can get information about the camera with 'v4l2-ctl -V'\n'ls /dev/video*' should now list a video0 device. If not if not, try rebooting (make sure modprobe is still active afterwards). Also make sure you have activated the raspicam module in 'raspi-config'.") && \
+    motion

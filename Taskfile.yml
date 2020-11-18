@@ -1,0 +1,17 @@
+# https://taskfile.dev
+
+version: '2'
+
+silent: true
+
+tasks:
+  run:
+    cmds:
+      # not sure which of the two devices is the correct one (/dev/vchiq or /dev/video0)
+      - cmd: |
+          docker run --rm \
+          --device /dev/video0 \
+          --volume /opt/vc:/opt/vc \
+          --user $(id -u):$(id -g) \
+          --port 8080:80 \
+          container_pi_webcam
