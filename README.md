@@ -1,4 +1,4 @@
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/tillhoff/containered-steamcmd/Publish%20image%20to%20docker%20hub)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/tillhoff/containered-pi-webcam/Publish%20image%20to%20docker%20hub)
 
 # containered-pi-webcam
 This container will run on a raspberry pi 3 b device with native camera enabled. It will capture a live video and present it via webrtc on a basic website.
